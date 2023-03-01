@@ -4,9 +4,10 @@ import ScheduleCheckBox from "./ScheduleCheckBox";
 const ScheduleRow = ({ schedule, setSchedule }) => {
   const [srow, setSrow] = useState(schedule);
   const [all, setAll] = useState("0");
-  const setSchedulee = (schedulee) => {
-    setSchedule(schedulee);
+  const setSchedulee = () => {
+    setSchedule(srow);
   };
+  //setting full row
   const setAllValues = (value) => {
     let row = srow;
     let ssrow = row.schedule;
@@ -15,15 +16,8 @@ const ScheduleRow = ({ schedule, setSchedule }) => {
     }
     setAll(all === "0" ? "1" : "0");
     setSrow({ ...srow, schedule: ssrow });
-    console.log("Setting All is ", ssrow);
   };
-  useEffect(() => {
-    //rerender component
-  }, [all]);
-  useEffect(() => {
-    console.log(srow);
-  }, [srow]);
-
+  //setting single checkbox
   const setRow = (value, key) => {
     let row = srow;
     let ssrow = row.schedule;
@@ -33,8 +27,15 @@ const ScheduleRow = ({ schedule, setSchedule }) => {
       }
     }
     setSrow({ ...srow, schedule: ssrow });
-    console.log("ssrow is ", ssrow);
   };
+  useEffect(() => {
+    //rerender component
+    setSchedulee();
+  }, [all]);
+  useEffect(() => {
+    setSchedulee();
+  }, [srow]);
+
   const iteratingOverRow = () => {
     const arr = [];
     for (const key in srow.schedule) {

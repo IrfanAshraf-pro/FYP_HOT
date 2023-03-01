@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import ScheduleRow from "./ScheduleRow";
 import SplitingSchedule from "../utils/ScheduleFunctions";
+import { setIsChange, setScheduleState } from "../../app/Slices/ScheduleSlice";
 
 const ScheduleComponent = () => {
   const schedules = useSelector((state) => state.schedule);
+  const { isScheduleDispatch } = useSelector((state) => state.schedule);
   const [schedule, setSchedule] = useState(
     SplitingSchedule(schedules.schedule)
   );
+  const dispatch = useDispatch();
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun", "All"];
   const timeslots = [
     {
@@ -75,12 +78,23 @@ const ScheduleComponent = () => {
       stamp: "PM",
     },
   ];
-  const SetSchedule = (schedules) => {
+  //setting schedule
+  const SetSchedulee = (scheduless) => {
     const newSchedule = schedule.map((item) => {
-      return item.row === schedules.row ? schedules : item;
+      return item.row === scheduless.row ? scheduless : item;
     });
+    console.log("new schedule is ", newSchedule);
     setSchedule(newSchedule);
   };
+  // telling store that schedule is changed
+  useEffect(() => {
+    dispatch(setIsChange());
+  }, [schedule]);
+  //checking if isDispatched is true or false
+  // useEffect(() => {
+  //   dispatch(setScheduleState({ schedule: schedule }));
+  // }, [isScheduleDispatch]);
+
   const slots = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   return (
     <div className="flex p-2 rounded-lg ">
@@ -108,7 +122,7 @@ const ScheduleComponent = () => {
             <div key={index}>
               <ScheduleRow
                 schedule={schedule[index]}
-                setSchedule={SetSchedule}
+                setSchedule={SetSchedulee}
               />
             </div>
           ))}
